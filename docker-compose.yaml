@@ -1,0 +1,82 @@
+version: "2.2"
+networks:
+  mynet:
+services:
+#  mysql:
+#    image: mysql:8.0
+#    ports:
+#      - "3306:3306"
+#    environment:
+#      - MYSQL_ROOT_PASSWORD=
+#      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+#      - MYSQL_USER=petclinic
+#      - MYSQL_PASSWORD=petclinic
+#      - MYSQL_DATABASE=petclinic
+#    volumes:
+#      - "./conf.d:/etc/mysql/conf.d:ro"
+#    profiles:
+#    - mysql
+  petclinicdb:
+    image: postgres:15.3
+    container_name: petclinic-database
+    ports:
+      - "5432:5432"
+    networks:
+      - mynet
+    environment:
+      - POSTGRES_PASSWORD=petclinic
+      - POSTGRES_USER=petclinic
+      - POSTGRES_DB=petclinic
+    profiles:
+    - petclinic
+  sonarqubedb:
+    image: postgres:15.3
+    container_name: sonarqube-database
+    ports:
+      - "5433:5432"
+    networks:
+      - mynet
+    environment:
+      - POSTGRES_PASSWORD=sonar
+      - POSTGRES_USER=sonar
+      - POSTGRES_DB=sonarqube
+    profiles:
+    - petclinic
+  petclinic:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: petclinic
+    container_name: petclinic
+    depends_on:
+      - petclinicdb
+    command: ["java", "-Dspring.profiles.active=postgres", "-jar", "petclinic.jar"]
+    networks:
+      - mynet
+    ports:
+      - "8080:8080"
+    profiles:
+    - petclinic
+  sonarqube:
+    image: sonarqube:community
+    container_name: sonarqube
+    depends_on:
+      - sonarqubedb
+    ports:
+      - "9000:9000"
+    networks:
+      - mynet
+    environment:
+      - SONAR_JDBC_URL=jdbc:postgresql://sonarqubedb:5432/sonarqube
+      - SONAR_JDBC_USERNAME=sonar
+      - SONAR_JDBC_PASSWORD=sonar
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+    profiles:
+      - petclinic
+volumes:
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_logs:
