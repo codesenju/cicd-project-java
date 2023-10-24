@@ -31,6 +31,10 @@ spec:
   nodeSelector:
     karpenter.sh/provisioner-name: "jenkins-agent"
   serviceAccount: jenkins-agent-sa
+  tolerations:
+    - key: "dedicated-jenkins-agent"
+      operator: "Exists"
+      effect: "NoExecute"
   containers:
   - name: "maven"
     image: "maven:3.9.4-eclipse-temurin-21-alpine"
