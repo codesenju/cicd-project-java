@@ -71,6 +71,11 @@ docker run --net spring-petclinic_mynet  \
     -v "$(PWD):/usr/src" \
     sonarsource/sonar-scanner-cli
 ```
+# Enable automatic build
+Add jenkins  server url (https://jenkins.example.com/github-webhook/) to:
+
+Settings -> Webhooks -> Payload URL
+![webhook](media/webhook.png)
 
 # Reference:
 - https://docs.sonarsource.com/sonarqube/latest/setup-and-upgrade/install-the-server/#example-docker-compose-configuration
