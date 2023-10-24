@@ -162,6 +162,7 @@ stages {
                 }
             }
         }
+        
     stage('Deploy - DEV') {
     steps { 
             sh 'echo Install kubectl cli...'
@@ -247,6 +248,8 @@ stages {
              }//end-wrap
        }//end-script
     }//end-steps
+
 }//end-stage-deploy-dev
+
 }//end-stages
 }//end-pipeline
