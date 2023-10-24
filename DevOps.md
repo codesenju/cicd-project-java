@@ -10,7 +10,6 @@ k3d cluster create jenkins --api-port 6550 \
 ```bash
 docker-compose --profile petclinic up -d
 ```
-
 ### Crate Sonarqube project
 - Projects -> Create project manually -> fill in the form and choose **next**.
 ![create-a-project](media/create-a-project.png)
