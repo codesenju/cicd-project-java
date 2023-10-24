@@ -72,6 +72,5 @@ docker run --net spring-petclinic_mynet  \
     -v "$(PWD):/usr/src" \
     sonarsource/sonar-scanner-cli
 ```
-
 # Reference:
 - https://docs.sonarsource.com/sonarqube/latest/setup-and-upgrade/install-the-server/#example-docker-compose-configuration
