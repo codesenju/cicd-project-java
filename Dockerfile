@@ -20,6 +20,7 @@ ENV OTEL_TRACES_SAMPLER "always_on"
 ENV OTEL_PROPAGATORS "tracecontext,baggage,xray"
 ENV OTEL_RESOURCE_ATTRIBUTES "service.name=Petclinic-adot-example"
 ENV OTEL_IMR_EXPORT_INTERVAL "10000"
+ENV OTEL_METRICS_EXPORTER "none"
 # ENV OTEL_EXPORTER_OTLP_ENDPOINT "[h][t][t][p][:]//my-collector-collector.***"
 # You have 1 Checkstyle violation.
 # [ERROR] Dockerfile:[23,35] (extension) NoHttp: http:// URLs are not allowed but got '[h][t][t][p]://my-collector-collector.***'. Use https:// instead.
