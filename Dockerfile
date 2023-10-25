@@ -20,7 +20,9 @@ ENV OTEL_TRACES_SAMPLER "always_on"
 ENV OTEL_PROPAGATORS "tracecontext,baggage,xray"
 ENV OTEL_RESOURCE_ATTRIBUTES "service.name=Petclinic-adot-example"
 ENV OTEL_IMR_EXPORT_INTERVAL "10000"
-ENV OTEL_EXPORTER_OTLP_ENDPOINT "http://my-collector-collector.opentelemetry-operator-system.svc.cluster.local:4317"
+# ENV OTEL_EXPORTER_OTLP_ENDPOINT "http://my-collector-collector.opentelemetry-operator-system.svc.cluster.local:4317"
+# You have 1 Checkstyle violation.
+# [ERROR] Dockerfile:[23,35] (extension) NoHttp: http:// URLs are not allowed but got 'http://my-collector-collector.opentelemetry-operator-system.svc.cluster.local:4317'. Use https:// instead.
 ###############################################
 
 ENV APP_NAME=petclinic
