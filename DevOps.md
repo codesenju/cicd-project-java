@@ -45,6 +45,7 @@ mvn verify -DskipTests sonar:sonar \
 # [INFO] Finished at: 2023-10-05T19:12:44+02:00
 # [INFO] ------------------------------------------------------------------------
 ```
+
 - Once scanning is done you can view the results.
 ![result](media/results.png)
 
