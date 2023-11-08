@@ -29,4 +29,5 @@ ENV OTEL_METRICS_EXPORTER "none"
 ENV APP_NAME=petclinic
 WORKDIR /app
 COPY --from=build /app/target/$APP_NAME.jar .
-CMD java -jar $APP_NAME.jar
+CMD java -Dspring.profiles.active=postgres -jar $APP_NAME.jar
+# CMD java -jar $APP_NAME.jar
