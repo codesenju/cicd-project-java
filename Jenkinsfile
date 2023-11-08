@@ -44,15 +44,20 @@ spec:
   - name: "jnlp"
     image: "codesenju/jenkins-inbound-agent:k8s"
     volumeMounts:
-    - mountPath: "/var/run/docker.sock"
+    - mountPath: "/var/run/"
       name: "docker-socket"
     securityContext:
       runAsUser: 0
+  - name: "dind"
+    image: "docker:dind"
+    securityContext:
+      privileged: true
+    volumeMounts:
+    - name: "docker-socket"
+      mountPath: "/var/run"
   volumes:
-  - hostPath:
-      path: "/var/run/docker.sock"
-      type: Socket 
-    name: "docker-socket"
+  - name: "docker-socket"
+    emptyDir: {}
     '''
     } }
     //environment {
@@ -162,7 +167,6 @@ stages {
                 }
             }
         }
-        
     stage('Deploy - DEV') {
     steps { 
             sh 'echo Install kubectl cli...'
@@ -248,7 +252,6 @@ stages {
              }//end-wrap
        }//end-script
     }//end-steps
-
 }//end-stage-deploy-dev
 
 }//end-stages
