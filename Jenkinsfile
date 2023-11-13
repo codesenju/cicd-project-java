@@ -99,7 +99,8 @@ stages {
                                               mvn -DskipTests verify sonar:sonar \
                                               -Dsonar.projectKey=petclinic \
                                               -Dsonar.host.url=https://sonarqube.lmasu.co.za \
-                                              -Dsonar.login=${TOKEN}
+                                              -Dsonar.login=${TOKEN} \
+                                              -Dsonar.qualitygate.wait=true
                                                '''
                                         }
                                 }
@@ -120,13 +121,13 @@ stages {
                         }//end-app-directory
                     }
                 } // end Unit Test
-                stage('Vulnerability Checks') {
+                stage('Owasp Dependency Check') {
                     steps {
                         dir('app-directory'){
                             script {
                               container('maven'){
                                sh '''
-                                mvn -v
+                                mvn org.owasp:dependency-check-maven:check
                                 '''
                                }
                             }
