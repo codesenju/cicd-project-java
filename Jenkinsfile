@@ -89,9 +89,9 @@ stages {
 
         stage('Test') {
             parallel {
-                stage('Code Quality') {
+                stage('Code Quality') { // start-CodeQuality
                     steps {
-                            script {
+                            script { //start-scrip
                                 container('maven'){
                                         withCredentials([string(credentialsId: "${env.PETCLINIC_SONAR_TOKEN}", variable: 'TOKEN')]) {
                                             sh '''
@@ -103,9 +103,9 @@ stages {
                                                '''
                                         }
                                 }
-                            }//end-scrip
+                            } //end-scrip
                     }
-                } // end IaC
+                } // end-CodeQuality
                 stage('Unit Tests') {
                     steps {
                             script {
