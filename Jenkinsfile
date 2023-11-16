@@ -66,32 +66,31 @@ spec:
     //}
     
 stages {
- 
-  stage('Checkout') {
-      steps {
-           script {
-                      def gitUrl = "git@github.com:${GITHUB_USERNAME}/${GITHUB_REPO}.git"
-                      def gitCredentialId = "${GITHUB_CRDENTIAL_ID}"
-                  checkout([
-                      $class: 'GitSCM',
-                      branches: [[name: '*/main']],
-                      doGenerateSubmoduleConfigurations: false,
-                      extensions: [[$class: 'ScmName', name:"${GITHUB_REPO}"], [$class: 'RelativeTargetDirectory', relativeTargetDir: 'app-directory']],
-                      submoduleCfg: [],
-                      userRemoteConfigs: [[
-                          credentialsId: gitCredentialId,
-                          url: gitUrl
-                      ]]
-                  ])
-         }
-      }
-  }//end-stage-checkout
+// // SKIP IF USING JENKINS ORGANISATION FOLDERS
+//  stage('Checkout') {
+//      steps {
+//           script {
+//                      def gitUrl = "git@github.com:${GITHUB_USERNAME}/${GITHUB_REPO}.git"
+//                      def gitCredentialId = "${GITHUB_CRDENTIAL_ID}"
+//                  checkout([
+//                      $class: 'GitSCM',
+//                      branches: [[name: '*/main']],
+//                      doGenerateSubmoduleConfigurations: false,
+//                      extensions: [[$class: 'ScmName', name:"${GITHUB_REPO}"], [$class: 'RelativeTargetDirectory', relativeTargetDir: 'app-directory']],
+//                      submoduleCfg: [],
+//                      userRemoteConfigs: [[
+//                          credentialsId: gitCredentialId,
+//                          url: gitUrl
+//                      ]]
+//                  ])
+//         }
+//      }
+//  }//end-stage-checkout
 
         stage('Test') {
             parallel {
                 stage('Code Quality') {
                     steps {
-                        dir('app-directory'){
                             script {
                                 container('maven'){
                                         withCredentials([string(credentialsId: "${env.PETCLINIC_SONAR_TOKEN}", variable: 'TOKEN')]) {
@@ -104,13 +103,11 @@ stages {
                                                '''
                                         }
                                 }
-                            }//end-app-directory
-                        }
+                            }//end-scrip
                     }
                 } // end IaC
                 stage('Unit Tests') {
                     steps {
-                        dir('app-directory'){
                             script {
                                container('maven'){
                                sh '''
@@ -118,12 +115,10 @@ stages {
                                 '''
                                }
                             }
-                        }//end-app-directory
                     }
                 } // end Unit Test
                 stage('Owasp Dependency Check') {
                     steps {
-                        dir('app-directory'){
                             script {
                               container('maven'){
                                sh '''
@@ -131,7 +126,6 @@ stages {
                                 '''
                                }
                             }
-                        }//end-app-directory
                     }
                 } // end Unit Test
             }
@@ -140,7 +134,6 @@ stages {
    
         stage('Build, Scan and Push') {
             steps {
-                dir('app-directory'){
                     script {
                        sh '''
                             if ! command -v trivy &> /dev/null
@@ -164,8 +157,7 @@ stages {
                         sh '''
                              printf '[{"app_name":"%s","image_name":"%s","image_tag":"%s"}]' "${APP_NAME}" "${IMAGE}" "${BUILD_NUMBER}" > build.json
                         '''
-                   }//end-app-directory
-                }
+                   }//end-script
             }
         }
     stage('Deploy - DEV') {
@@ -225,7 +217,6 @@ stages {
                     wrap([$class: 'MaskPasswordsBuildWrapper', varPasswordPairs: [[password: ARGOCD_PASSWORD],[password: ARGOCD_USERNAME], [password: ARGOCD_SERVER]]]) {
                         withEnv(["USERNAME=${ARGOCD_USERNAME}", "PASSWORD=${ARGOCD_PASSWORD}","SERVER=${ARGOCD_SERVER}"]){
                            sh 'argocd login $SERVER --username $USERNAME --password $PASSWORD'
-                           dir('app-directory'){
                                sh 'ls -la'
                                sh 'cat argocd.yaml'
                                // Assuming repo already added to argocd server
@@ -246,7 +237,6 @@ stages {
                                  argocd app get $APP_NAME --refresh
                                  argocd app wait $APP_NAME
                                 '''
-                           }//end-dir
                         }//end-withEnv
                     } //end-wrap
                   }//end-withEnv
