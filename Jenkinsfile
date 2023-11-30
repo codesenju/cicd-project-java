@@ -120,6 +120,7 @@ stages {
         }
 
         stage('Parallel Tests') {
+            failFast true // Force your parallel stages to all be aborted when any one of them fails.
             parallel {
                 stage('Quality Tests') {
                     steps {
