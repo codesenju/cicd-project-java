@@ -12,7 +12,8 @@ parameters {
     string(name: 'CLUSTER_NAME', defaultValue: 'uat', description: 'EKS cluster name')
     string(name: 'AWS_REGION', defaultValue: 'us-east-1', description: 'AWS region')
     string(name: 'ARGOCD_CLUSTER_NAME', defaultValue: 'in-cluster', description: 'Argocd destination cluster name')
-    string(name: 'APP_SONAR_TOKEN', defaultValue: 'global_sonar_token', description: 'Global analysis token - This token can be used to run analyses on every project.')
+    string(name: 'APP_SONAR_TOKEN', defaultValue: 'global_sonar_token', description: 'Global analysis token - This token can be used to run analyses on every project')
+    string(name: 'SONAR_URL', defaultValue: 'https://sonarqube.lmasu.co.za', description: 'Sonarqube host')
     // choice(name: 'LANGUAGE',choices: ['Python', 'Java'],description: 'Select the language of the application to build')
 }
 
@@ -149,12 +150,12 @@ stages {
                                 case 'Java':
 
                                     container('maven'){
-                                        withCredentials([string(credentialsId: params.APP_SONAR_TOKEN, variable: 'TOKEN')]) {
+                                        withCredentials([string(credentialsId: params.APP_SONAR_TOKEN, variable: 'SONAR_TOKEN')]) {
                                             sh '''
                                               mvn -DskipTests verify sonar:sonar \
-                                              -Dsonar.projectKey=petclinic \
-                                              -Dsonar.host.url=https://sonarqube.lmasu.co.za \
-                                              -Dsonar.login=${TOKEN} \
+                                              -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+                                              -Dsonar.host.url=${SONAR_URL} \
+                                              -Dsonar.login=${SONAR_TOKEN} \
                                               -Dsonar.qualitygate.wait=true
                                                '''
                                         }
