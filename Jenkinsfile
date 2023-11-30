@@ -12,7 +12,7 @@ parameters {
     string(name: 'CLUSTER_NAME', defaultValue: 'uat', description: 'EKS cluster name')
     string(name: 'AWS_REGION', defaultValue: 'us-east-1', description: 'AWS region')
     string(name: 'ARGOCD_CLUSTER_NAME', defaultValue: 'in-cluster', description: 'Argocd destination cluster name')
-    string(name: 'APP_SONAR_TOKEN', defaultValue: 'petclinic_sonar_token', description: 'SonarQube application token')
+    string(name: 'APP_SONAR_TOKEN', defaultValue: 'global_sonar_token', description: 'Global analysis token - This token can be used to run analyses on every project.')
     // choice(name: 'LANGUAGE',choices: ['Python', 'Java'],description: 'Select the language of the application to build')
 }
 
