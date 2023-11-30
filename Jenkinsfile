@@ -99,7 +99,7 @@ stages {
             steps {
                 script {
                     // Read properties file
-                    def props = readProperties file: 'config.properties'
+                    def props = readProperties file: 'jenkins.properties'
 
                     // Convert properties to environment variables
                     props.each { key, value ->
