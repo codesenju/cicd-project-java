@@ -80,3 +80,4 @@ Settings -> Webhooks -> Payload URL
 
 # Reference:
 - https://docs.sonarsource.com/sonarqube/latest/setup-and-upgrade/install-the-server/#example-docker-compose-configuration
+#
